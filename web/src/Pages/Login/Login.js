@@ -1,8 +1,10 @@
 import { Alert, Button, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
+import useAuth from "../../Hooks/useAuth";
 import * as AuthenticationService from "../../Services/AuthenticationService";
 
 // Formik validation schema
@@ -12,6 +14,12 @@ const validationSchema = Yup.object({
 });
 
 function Login() {
+  const { auth, setAuth } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const [error, setError] = useState("");
 
   let userAuthentication = {
@@ -24,8 +32,9 @@ function Login() {
     initialValues: userAuthentication,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      // console.log(values);
       authenticateUser(values);
+      navigate(from, { replace: true });
     },
   });
 
@@ -33,8 +42,22 @@ function Login() {
   function authenticateUser(values) {
     AuthenticationService.login(values)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setError("");
+        const user = values.userName;
+        const password = values.password;
+        const accessToken = res?.data?.accessToken;
+        const refreshToken = res?.data?.refreshToken;
+        const roles = res?.data?.roles;
+        setAuth({
+          user,
+          password,
+          roles,
+          accessToken,
+          refreshToken
+        });
+        // console.log(roles);
+        // console.log(auth);
       })
       .catch((err) => setError("Invalid Username/password."));
   }
@@ -84,7 +107,15 @@ function Login() {
           <Button color="primary" variant="contained" type="submit">
             Login
           </Button>
-          
+          <Button
+            color="secondary"
+            variant="contained"
+            component={Link}
+            to="/register"
+            sx={{ ml: 1 }}
+          >
+            Create New Account
+          </Button>
         </div>
       </Box>
     </>

@@ -31,7 +31,7 @@ function PublicMenu() {
 
   const handleCloseNavMenu = (page) => {
     setAnchorElNav(null);
-    console.log("menu click: " + page);
+    // console.log("menu click: " + page);
   };
 
   const handleCloseUserMenu = () => {

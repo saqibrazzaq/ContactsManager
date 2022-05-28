@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Service.Contracts;
 using Shared.Dtos.User;
+using Shared.Utils;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -59,7 +60,7 @@ namespace Service
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-                    Environment.GetEnvironmentVariable("SECRET_EMPLOYEE_MANAGEMENT_API"))),
+                    Environment.GetEnvironmentVariable(Constants.JWT_KEY))),
                 ValidateLifetime = true,
                 ValidIssuer = _jwtConfiguration.ValidIssuer,
                 ValidAudience = _jwtConfiguration.ValidAudience
@@ -91,7 +92,8 @@ namespace Service
             if (populateExp) _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
             await _userManager.UpdateAsync(_user);
             var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            return new TokenDto(accessToken, refreshToken);
+            var roles = await _userManager.GetRolesAsync(_user);
+            return new TokenDto(accessToken, refreshToken, roles);
         }
 
         private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials,
@@ -111,7 +113,7 @@ namespace Service
         private SigningCredentials GetSigningCredentials()
         {
             var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable
-                ("JWT_KEY"));
+                (Constants.JWT_KEY));
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }

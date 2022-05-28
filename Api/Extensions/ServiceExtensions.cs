@@ -10,6 +10,7 @@ using Repository;
 using Repository.Contracts;
 using Service;
 using Service.Contracts;
+using Shared.Utils;
 using System.Text;
 
 namespace Api.Extensions
@@ -23,7 +24,9 @@ namespace Api.Extensions
                 options.AddPolicy("CorsPolicy", builder =>
                 {
                     builder
-                    .AllowAnyOrigin() // WithOrigins("https://www.website.com")
+                    //.AllowAnyOrigin()
+                    .WithOrigins("http://localhost:3000")
+                    .AllowCredentials()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .WithExposedHeaders("X-Pagination");
@@ -74,7 +77,7 @@ namespace Api.Extensions
         { 
             var jwtConfiguration = new JwtConfiguration(); 
             configuration.Bind(jwtConfiguration.Section, jwtConfiguration); 
-            var secretKey = Environment.GetEnvironmentVariable("JWT_KEY"); 
+            var secretKey = Environment.GetEnvironmentVariable(Constants.JWT_KEY); 
             services.AddAuthentication(opt => 
             { 
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

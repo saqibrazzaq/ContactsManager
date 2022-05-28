@@ -8,6 +8,6 @@ namespace Shared.Dtos.User
 {
     public record TokenDto
         (
-        string AccessToken, string RefreshToken
+        string AccessToken, string RefreshToken, IEnumerable<string> Roles
         );
 }

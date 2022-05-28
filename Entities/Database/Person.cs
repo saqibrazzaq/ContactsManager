@@ -21,5 +21,10 @@ namespace Entities.Database
         public string? Address1 { get; set; }
         [MaxLength(255, ErrorMessage = "Maximum 255 characters.")]
         public string? Address2 { get; set; }
+
+        // Foreign keys
+        public string? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
     }
 }

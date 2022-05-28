@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class PersonsController : ApiControllerBase
     {

@@ -6,7 +6,7 @@ using Shared.Dtos.User;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class TokenController : ApiControllerBase
     {
@@ -17,7 +17,6 @@ namespace Api.Controllers
         }
 
         [HttpPost("refresh")]
-        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Refresh([FromBody] TokenDto tokenDto)
         {
             var tokenDtoToReturn = await _service.AuthenticationService

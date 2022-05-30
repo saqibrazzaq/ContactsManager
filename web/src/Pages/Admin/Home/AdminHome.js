@@ -3,7 +3,7 @@ import React from 'react'
 const AdminHome = () => {
   return (
     <div>
-      Admin Home - Must be visible to authorized users.
+      <h1>Welcome Admin/Manager</h1>
     </div>
   )
 }

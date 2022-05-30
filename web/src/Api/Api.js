@@ -1,10 +1,13 @@
 import axios from "axios";
 
-const BASE_URL = "https://localhost:7265/api/v1";
+const BASE_URL = "https://localhost:7232/api/v1";
+
+axios.defaults.withCredentials = true
 
 // For public API access
 export default axios.create({
   baseURL: BASE_URL,
+  withCredentials: true
 });
 
 // For private API access, which uses JWT tokens and auth

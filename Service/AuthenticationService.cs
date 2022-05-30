@@ -63,7 +63,8 @@ namespace Service
                     Environment.GetEnvironmentVariable(Constants.JWT_KEY))),
                 ValidateLifetime = true,
                 ValidIssuer = _jwtConfiguration.ValidIssuer,
-                ValidAudience = _jwtConfiguration.ValidAudience
+                ValidAudience = _jwtConfiguration.ValidAudience,
+                ClockSkew = TimeSpan.Zero
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -89,7 +90,7 @@ namespace Service
 
             var refreshToken = GenerateRefreshToken();
             _user.RefreshToken = refreshToken;
-            if (populateExp) _user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            if (populateExp) _user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _userManager.UpdateAsync(_user);
             var accessToken = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
             var roles = await _userManager.GetRolesAsync(_user);
@@ -104,7 +105,7 @@ namespace Service
                 issuer: _jwtConfiguration.ValidIssuer,
                 audience: _jwtConfiguration.ValidAudience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtConfiguration.Expires)),
+                expires: DateTime.UtcNow.AddSeconds(Convert.ToDouble(_jwtConfiguration.Expires)),
                 signingCredentials: signingCredentials
                 );
             return tokenOptions;
@@ -156,7 +157,7 @@ namespace Service
             var principal = GetPrincipalFromExpiredToken(tokenDto.AccessToken);
             var user = await _userManager.FindByNameAsync(principal.Identity.Name);
             if (user == null || user.RefreshToken != tokenDto.RefreshToken ||
-                user.RefreshTokenExpiryTime <= DateTime.Now)
+                user.RefreshTokenExpiryTime <= DateTime.UtcNow)
                 throw new BadRequestException("Invalid Jwt token.");
 
             _user = user;

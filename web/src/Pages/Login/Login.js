@@ -9,7 +9,7 @@ import * as AuthenticationService from "../../Services/AuthenticationService";
 
 // Formik validation schema
 const validationSchema = Yup.object({
-  userName: Yup.string().required("Username is required"),
+  email: Yup.string().required("Email is required"),
   password: Yup.string().required("Password is required."),
 });
 
@@ -23,7 +23,7 @@ function Login() {
   const [error, setError] = useState("");
 
   let userAuthentication = {
-    userName: "",
+    email: "",
     password: "",
   };
 
@@ -32,34 +32,35 @@ function Login() {
     initialValues: userAuthentication,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      // console.log(values);
+       console.log('form submit' + values);
       authenticateUser(values);
-      navigate(from, { replace: true });
+      //navigate(from, { replace: true });
     },
   });
 
   // Authenticate user
-  function authenticateUser(values) {
+  const authenticateUser = (values) => {
     AuthenticationService.login(values)
       .then((res) => {
-        // console.log(res);
+        console.log('authenticate api service response');
+        console.log(res);
         setError("");
-        const user = values.userName;
+        const email = values.email;
         const password = values.password;
         const accessToken = res?.data?.accessToken;
-        const refreshToken = res?.data?.refreshToken;
-        const roles = res?.data?.roles;
+        // const refreshToken = res?.data?.refreshToken;
+        const roles = [res?.data?.role];
         setAuth({
-          user,
+          email,
           password,
           roles,
           accessToken,
-          refreshToken
+          // refreshToken
         });
-        // console.log(roles);
-        // console.log(auth);
+         console.log(roles);
+         console.log(auth);
       })
-      .catch((err) => setError("Invalid Username/password."));
+      .catch((err) => setError("Invalid Email/password."));
   }
 
   return (
@@ -82,13 +83,13 @@ function Login() {
         <div>
           <TextField
             fullWidth
-            id="userName"
-            name="userName"
-            label="userName"
+            id="email"
+            name="email"
+            label="email"
             value={formik.values.email}
             onChange={formik.handleChange}
-            error={formik.touched.userName && Boolean(formik.errors.userName)}
-            helperText={formik.touched.userName && formik.errors.userName}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
 
           <TextField

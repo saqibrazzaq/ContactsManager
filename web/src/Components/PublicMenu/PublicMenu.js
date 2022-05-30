@@ -16,7 +16,7 @@ import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const pages = ["Home", "Contacts", "Blog", "Admin"];
-const settings = ["Admin", "Account", "Dashboard", "Login", "Logout"];
+const settings = ["Admin", "Account", "Dashboard", "Login", "SignOut"];
 
 function PublicMenu() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

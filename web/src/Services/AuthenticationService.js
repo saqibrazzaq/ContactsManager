@@ -1,7 +1,11 @@
 import Api from "../Api/Api";
 
-const url = "Authentication";
+const url = "Users";
 
 export function login(data) {
-  return Api.post(url + "/login", data);
+  console.log('data posted to api')
+  console.log(data);
+  return Api.post(url + "/authenticate", data, {
+    withCredentials: true
+  });
 }

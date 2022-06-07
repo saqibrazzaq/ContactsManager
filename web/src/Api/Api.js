@@ -6,15 +6,14 @@ axios.defaults.withCredentials = true
 
 // For public API access
 export default axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true
+  baseURL: BASE_URL
 });
 
-// For private API access, which uses JWT tokens and auth
-export const axiosPrivate = axios.create({
-  baseURL: BASE_URL,
-  headers: {
-    "content-type": "application/json",
-  },
-  withCredentials: true,
-});
+// // For private API access, which uses JWT tokens and auth
+// export const axiosPrivate = axios.create({
+//   baseURL: BASE_URL,
+//   headers: {
+//     "content-type": "application/json",
+//   },
+//   withCredentials: true,
+// });

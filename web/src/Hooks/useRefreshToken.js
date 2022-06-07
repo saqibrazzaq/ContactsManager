@@ -1,21 +1,19 @@
 import React from "react";
-import {axiosPrivate} from "../Api/Api";
+import Api from "../Api/Api";
 import useAuth from "./useAuth";
 
 const useRefreshToken = () => {
   const { auth, setAuth } = useAuth();
 
   const refresh = async () => {
-    console.log("in useRefresh()");
-    console.log(auth);
-    const response = await axiosPrivate.post("Users/refresh-token", {
-      withCredentials: true
-    });
-    console.log("got response from useRefresh()");
+    // console.log("in useRefresh()");
+    // console.log(auth);
+    const response = await Api.post("Users/refresh-token");
+    // console.log("got response from useRefresh()");
     setAuth((prev) => {
       // console.log(JSON.stringify(prev));
       // console.log(response.data.accessToken);
-      console.log('Refresh token.');
+      // console.log('Refresh token.');
       return {
         ...prev,
         accessToken: response.data.accessToken,

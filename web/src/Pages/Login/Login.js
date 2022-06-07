@@ -18,7 +18,7 @@ function Login() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = "/";
 
   const [error, setError] = useState("");
 
@@ -34,7 +34,7 @@ function Login() {
     onSubmit: (values) => {
        console.log('form submit' + values);
       authenticateUser(values);
-      //navigate(from, { replace: true });
+      navigate(from, { replace: true });
     },
   });
 

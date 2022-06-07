@@ -1,18 +1,20 @@
-import Api from "../Api/Api";
+import * as AuthenticationService from "../Services/AuthenticationService";
 import useAuth from "./useAuth";
 
 const useLogout = () => {
-  const {setAuth} = useAuth();
+  const { setAuth } = useAuth();
 
-  const logout = async() => {
+  const logout = async () => {
     setAuth({});
 
-    // try {
-    //   // const response = await Api.get('logout')
-    // }
-  }
+    AuthenticationService.logout()
+      .then((res) => {
+        console.log("logout successful");
+      })
+      .catch((err) => console.log("Cannot logout successfully"));
+  };
 
   return logout;
-}
+};
 
 export default useLogout;
